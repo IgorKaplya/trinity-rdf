@@ -27,6 +27,7 @@
 
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -486,6 +487,33 @@ namespace Semiodesk.Trinity.Test.Linq
             var actual = Model.AsQueryable<Person>().ToList();
 
             CollectionAssert.AreEquivalent(expected, actual.Select(p => p.Uri));
+        }
+
+        [Test]
+        public void CanSelectResourcesWithAsQueryableWithoutAttributes()
+        {
+            const int expected = 3;
+            var actual = Model
+                .AsQueryable<OnlineAccount>()
+                .Skip(0)
+                .Take(expected)
+                .ToList();
+
+            Assert.AreEqual(expected, actual.Count);
+
+            actual.ForEach(account => Assert.IsNotEmpty(account.AccountName));
+        }
+
+        protected IEnumerable<OnlineAccount> GenerateOnlineAccounts(int count, IModel model)
+        {
+            var result = Enumerable.Range(0, count).Select(i =>
+            {
+                var account = model.CreateResource<OnlineAccount>();
+                account.AccountName = $"test account name {i}";
+                account.Commit();
+                return account;
+            });
+            return result;
         }
 
         [Test]

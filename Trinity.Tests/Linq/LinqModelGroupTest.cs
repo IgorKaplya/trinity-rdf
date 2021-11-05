@@ -112,6 +112,9 @@ namespace Semiodesk.Trinity.Test.Linq
             i1.DepictedAgent = p1;
             i1.Commit();
 
+            GenerateOnlineAccounts(5, model1);
+            GenerateOnlineAccounts(5, model2);
+
             Model = Store.CreateModelGroup(model1, model2);
         }
     }

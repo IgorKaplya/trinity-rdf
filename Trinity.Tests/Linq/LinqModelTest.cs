@@ -27,7 +27,11 @@
 
 using NUnit.Framework;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using NUnit.Framework.Constraints;
 
 namespace Semiodesk.Trinity.Test.Linq
 {
@@ -108,6 +112,18 @@ namespace Semiodesk.Trinity.Test.Linq
             Image i1 = Model.CreateResource<Image>();
             i1.DepictedAgent = p1;
             i1.Commit();
+        }
+
+        protected IEnumerable<OnlineAccount> GenerateOnlineAccounts(int count)
+        {
+            var result = Enumerable.Range(0, count).Select(i =>
+            {
+                var account = Model.CreateResource<OnlineAccount>();
+                account.AccountName = $"test account name {i}";
+                account.Commit();
+                return account;
+            });
+            return result;
         }
     }
 }
